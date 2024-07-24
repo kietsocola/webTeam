@@ -24,6 +24,16 @@ public class Task {
 	private int project;
 	private String description;
 	private long hoursRemaining;
+	private int userCreate;
+	public int getUserCreate() {
+		return userCreate;
+	}
+	public void setUserCreate(int userCreate) {
+		this.userCreate = userCreate;
+	}
+	public void setProject(int project) {
+		this.project = project;
+	}
 	public int getId() {
 		return id;
 	}
