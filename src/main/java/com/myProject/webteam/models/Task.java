@@ -2,7 +2,9 @@ package com.myProject.webteam.models;
 
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import jakarta.persistence.*;
 
@@ -18,20 +20,34 @@ public class Task {
 	@Column(name="dateEnd")
 	private LocalDateTime dateEnd;
 	private int point;
-	private int category;
+	@ManyToOne
+	@JoinColumn(name="category", nullable = false)
+	private Category category;
 	private int level;
 	private int status;
-	private int project;
+	@ManyToOne
+    @JoinColumn(name="project", nullable = false)
+	private Project project;
 	private String description;
 	private long hoursRemaining;
-	private int userCreate;
-	public int getUserCreate() {
+	@ManyToOne
+    @JoinColumn(name="userCreate", nullable = false)
+	private User userCreate;
+	@OneToMany(mappedBy="task", cascade = CascadeType.REMOVE)
+	private List<Comment> comments = new ArrayList<>();
+	public User getUserCreate() {
 		return userCreate;
 	}
-	public void setUserCreate(int userCreate) {
+	public List<Comment> getComments() {
+		return comments;
+	}
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
+	}
+	public void setUserCreate(User userCreate) {
 		this.userCreate = userCreate;
 	}
-	public void setProject(int project) {
+	public void setProject(Project project) {
 		this.project = project;
 	}
 	public int getId() {
@@ -64,10 +80,10 @@ public class Task {
 	public void setPoint(int point) {
 		this.point = point;
 	}
-	public int getCategory() {
+	public Category getCategory() {
 		return category;
 	}
-	public void setCategory(int category) {
+	public void setCategory(Category category) {
 		this.category = category;
 	}
 	public int getLevel() {
@@ -82,10 +98,10 @@ public class Task {
 	public void setStatus(int status) {
 		this.status = status;
 	}
-	public int getProject() {
+	public Project getProject() {
 		return project;
 	}
-	public void setIdProject(int idProject) {
+	public void setIdProject(Project idProject) {
 		this.project = idProject;
 	}
 	public String getDescription() {

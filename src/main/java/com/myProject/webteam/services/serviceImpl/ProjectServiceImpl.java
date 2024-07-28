@@ -21,5 +21,9 @@ public class ProjectServiceImpl implements ProjectService{
 	public List<Project> getListProject() {
 		return projectResponsitory.findAll();
 	}
+	@Override
+	public Project getProjectById(int id) {
+		return projectResponsitory.getReferenceById(id);
+	}
 
 }
