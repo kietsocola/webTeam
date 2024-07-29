@@ -11,9 +11,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.myProject.webteam.dto.TaskDTO;
 import com.myProject.webteam.models.Project;
 import com.myProject.webteam.models.Task;
 import com.myProject.webteam.services.CategoryService;
@@ -35,6 +37,15 @@ public class ProjectController {
 		model.addAttribute("projects", projects);
 		return "board/index";
 	}
+	@PostMapping("/addProject")
+	public String addProject(Model model, @RequestParam String nameProject) {
+		projectService.saveProject(nameProject);
+		List<Project> projects = projectService.getListProject();
+		model.addAttribute("projects", projects);
+		Project project = projects.getLast();
+		model.addAttribute("projectFindById", project);
+		return "board/index";
+	}
 	@GetMapping("/project/{idProject}")
 	public String detailProject(Model model, @PathVariable("idProject") int idProject) {
 		List<Project> projects = projectService.getListProject();
@@ -53,6 +64,7 @@ public class ProjectController {
 		model.addAttribute("categoryTask", categoryService.getListCategory());
 		List<Integer> loopList = Arrays.asList(1, 2, 3);
         model.addAttribute("loopList", loopList);
+        model.addAttribute("taskNew", new TaskDTO());
 		return "board/index";
 	}
 }

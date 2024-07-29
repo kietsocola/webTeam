@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,12 +24,10 @@ public class TaskController {
 		this.taskService = taskService;
 	}
 	
-	@PostMapping("/saveTask")
-	@ResponseBody
-	public TaskDTO loadTaskOfProject(@RequestBody TaskDTO taskDTO) {
+	@PostMapping("/project/{idProject}/addTask")
+	public String loadTaskOfProject(@ModelAttribute TaskDTO taskDTO, @PathVariable("idProject") int idProject) {
 		Task taskSaved = taskService.saveTask(taskDTO);
-		taskDTO.setId(taskSaved.getId());
-		return taskDTO;
+		return "redirect:/project/"+idProject;
 	}
 	
 	@GetMapping("/task/changeStatus/{idProject}/{idTask}/{status}")

@@ -25,5 +25,11 @@ public class ProjectServiceImpl implements ProjectService{
 	public Project getProjectById(int id) {
 		return projectResponsitory.getReferenceById(id);
 	}
+	@Override
+	public Project saveProject(String name) {
+		Project pro = new Project();
+		pro.setName(name);
+		return projectResponsitory.save(pro);
+	}
 
 }
