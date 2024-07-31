@@ -7,7 +7,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Team</title>
-<link rel="stylesheet" href="styles.css">
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
 	rel="stylesheet">
@@ -59,337 +58,20 @@
 					<div id="demo" class="collapse">
 						<form action="/addProject" method="POST">
 							<input type="text" placeholder="type then press enter..."
-							class="form-control mb-3" name="nameProject" id="nameProject">
+								class="form-control mb-3" name="nameProject" id="nameProject">
 						</form>
 					</div>
 					<div class="list-group">
 						<a th:each="project: ${projects}" th:text="${project.name}"
 							th:href="@{/project/{idProject}(idProject=${project.id})}"
-							class="list-group-item list-group-item-action"></a>
+							class="list-group-item list-group-item-action list-project-item"
+							th:data-id="${project.id}"></a>
 					</div>
 				</div>
 			</div>
-			<div class="col-sm-10 border">
-				<div class="row">
-					<div class="row p-2 mt-2">
-						<h5 th:text="${projectFindById.name}"></h5>
-					</div>
-					<div class="row">
-						<nav
-							class="navbar navbar-expand-sm bg-light d-flex justify-content-start">
-
-							<div class="container-fluid"></div>
-							<!-- Links -->
-							<ul class="navbar-nav">
-								<li class="nav-item"><a class="nav-link " href="#">Summary</a>
-								</li>
-								<li class="nav-item"><a class="nav-link active" href="#">Board</a>
-								</li>
-								<li class="nav-item"><a class="nav-link" href="#">Calendar</a>
-								</li>
-							</ul>
-						</nav>
-					</div>
-				</div>
-				<div class="row">
-					<div class="row">
-						<div class="container-fluid d-flex p-3 gap-3">
-							<a th:each="userProject: ${projectFindById.users}"
-								class="navbar-brand" href="#" data-bs-toggle="tooltip"
-								th:title="${userProject.nameLogin}"> <img
-								src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png"
-								alt="Avatar Logo" style="width: 40px;" class="rounded-pill">
-							</a>
-							<button type="button" class="btn btn-outline-info"
-								data-bs-toggle="modal" data-bs-target="#inviteUser">Invite</button>
-							<div class="modal" id="inviteUser">
-								<div class="modal-dialog modal-lg modal-dialog-centered">
-									<div class="modal-content">
-
-										<!-- Modal Header -->
-										<div class="modal-header">
-											<h4 class="modal-title">Invite user</h4>
-											<button type="button" class="btn-close"
-												data-bs-dismiss="modal"></button>
-										</div>
-
-										<!-- Modal body -->
-										<div class="modal-body">
-											<div class="mb-3 mt-3">
-												<label for="email" class="form-label">Email:</label> <input
-													type="email" class="form-control" id="email"
-													placeholder="Enter email user" name="email">
-											</div>
-											<button type="submit" class="btn btn-primary">Invite</button>
-										</div>
-
-										<!-- Modal footer -->
-										<div class="modal-footer">
-											<button type="button" class="btn btn-danger"
-												data-bs-dismiss="modal">Close</button>
-										</div>
-
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-3" th:each="loop, iterStat : ${loopList}">
-							<div class="card">
-								<div class="card-header">
-									<span th:if="${iterStat.index == 0}" class="badge bg-secondary">TODO</span>
-									<span th:if="${iterStat.index == 1}" class="badge bg-primary">IN
-										PROGRESS</span> <span th:if="${iterStat.index == 2}"
-										class="badge bg-success">DONE</span>
-								</div>
-								<div class="card-body px-1" id="containTask">
-									<div th:if="${projectFindById.tasks != null}">
-										<p th:if="${projectFindById.tasks.size() == 0}"
-											th:text="'Null'"></p>
-									</div>
-									<div class="border p-2 rounded mb-2"
-										th:each="task: ${projectFindById.tasks} "
-										data-bs-toggle="modal"
-										th:data-bs-target="${'#myModal'+task.id}"
-										th:if="${task.status==iterStat.index}">
-										<div class="d-flex align-items-center justify-content-between">
-											<p th:text="${task.name}"
-												style="max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
-												class="mb-0 fs-5"></p>
-											<div class="d-flex align-items-center justify-content-between">
-												<span class="badge bg-success" th:if="${task.level == 1}">EASY</span>
-												<span class="badge bg-warning" th:if="${task.level == 2}">MEDIUM</span>
-												<span class="badge bg-danger" th:if="${task.level == 3}">HARD</span>
-												<a class="navbar-brand ms-2" href="#"> <img
-													src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png"
-													alt="Avatar Logo" style="width: 40px;" class="rounded-pill">
-												</a>
-											</div>
-										</div>
-										<div class="row p-2"></div>
-										<div class="d-flex align-items-center justify-content-between">
-											<p class="fst-italic" th:text="${task.point}+' point'"></p>
-											<p class="fst-italic" th:if="${task.hoursRemaining>0}"
-												th:text="${task.hoursRemaining}+' hours'"></p>
-											<p class="fst-italic text-danger"
-												th:if="${task.hoursRemaining>0 && task.hoursRemaining<12}"
-												th:text="${task.hoursRemaining}+' hours'"></p>
-											<p class="fst-italic text-success" th:if="${task.status==2}"
-												th:text="${task.hoursRemaining}+' hours'"></p>
-											<p class="fst-italic text-danger"
-												th:if="${task.hoursRemaining<=0 && task.status!=2}"
-												th:text="'deadline expired'"></p>
-										</div>
-										<!-- MODAL -->
-										<div class="modal" th:id="'myModal' + ${task.id}">
-											<div class="modal-dialog modal-lg modal-dialog-centered">
-												<div class="modal-content">
-
-													<!-- Modal Header -->
-													<div class="modal-header">
-														<h4 class="modal-title" th:text="${task.name}"></h4>
-														<button type="button" class="btn-close"
-															data-bs-dismiss="modal"></button>
-													</div>
-
-													<!-- Modal body -->
-													<div class="modal-body">
-														<div class="row">
-															<div th:id="'containComment'+${task.id}" class="col-sm-7"
-																style="height: 300px; overflow: auto;">
-																<div class="d-flex align-items-center mb-2">
-																	<p class="fs-5 mb-0">Description</p>
-																	<div class="dropdown dropend ms-3">
-																		<button th:if="${task.status==0}" type="button"
-																			class="btn btn-outline-secondary dropdown-toggle p-1"
-																			data-bs-toggle="dropdown">TODO</button>
-																		<button th:if="${task.status==1}" type="button"
-																			class="btn btn-outline-primary dropdown-toggle p-1"
-																			data-bs-toggle="dropdown">IN PROGRESS</button>
-																		<button th:if="${task.status==2}" type="button"
-																			class="btn btn-outline-success dropdown-toggle p-1"
-																			data-bs-toggle="dropdown">DONE</button>
-																		<ul class="dropdown-menu p-0"
-																			style="min-width: 100px; padding: 0.25rem; font-size: 0.875rem;">
-																			<li><a class="dropdown-item"
-																				th:classappend="${task.status==0?'active':''}"
-																				th:href="@{/task/changeStatus/{idProject}/{idTask}/{status}(idProject=${task.project.id}, idTask=${task.id}, status=0)}">TODO</a></li>
-																			<li><a class="dropdown-item"
-																				th:classappend="${task.status==1?'active':''}"
-																				th:href="@{/task/changeStatus/{idProject}/{idTask}/{status}(idProject=${task.project.id}, idTask=${task.id}, status=1)}">IN
-																					PROGRESS</a></li>
-																			<li><a class="dropdown-item"
-																				th:classappend="${task.status==2?'active':''}"
-																				th:href="@{/task/changeStatus/{idProject}/{idTask}/{status}(idProject=${task.project.id}, idTask=${task.id}, status=2)}">DONE</a></li>
-																		</ul>
-																	</div>
-																</div>
-																<p class="fst-italic" th:text="${task.description}"></p>
-																<p class="fs-5 mb-1">Comment</p>
-																<div class="container">
-																	<form th:id="'formSendCmt'+${task.id}">
-																		<div class="mb-3 mt-3">
-																			<textarea class="form-control" rows="5" id="content"
-																				name="content" placeholder="Your comment"
-																				style="height: 80px;"></textarea>
-																		</div>
-																		<input type="hidden" name="idTaskCmt" id="idTaskCmt"
-																			th:value="${task.id}">
-																		<div class="d-flex justify-content-end">
-																			<button type="submit"
-																				class="btn btn-outline-secondary p-1">Submit</button>
-																		</div>
-																	</form>
-																</div>
-																<div class="row mb-2" th:each="cmt: ${task.comments}">
-																	<div class="d-flex">
-																		<p class="mb-0 me-3 fw-bold"
-																			th:text="${cmt.user.nameLogin}"></p>
-																		<p class="mb-0 fst-italic" th:text="${cmt.dateCreate}"></p>
-																	</div>
-																	<p th:text="${cmt.content}"></p>
-																</div>
-															</div>
-															<div class="col-sm-5">
-																<table class="table table-borderless border">
-																	<thead>
-																		<tr class="border">
-																			<th>Detail</th>
-																			<th></th>
-																		</tr>
-																	</thead>
-																	<tbody>
-																		<tr>
-																			<td>User Create</td>
-																			<td th:text="${task.userCreate.nameLogin}"></td>
-																		</tr>
-																		<tr>
-																			<td>Date Create</td>
-																			<td th:text="${task.dateCreate}"></td>
-																		</tr>
-																		<tr>
-																			<td>Date End</td>
-																			<td th:text="${task.dateEnd}"></td>
-																		</tr>
-																		<tr>
-																			<td>Category</td>
-																			<td th:text="${task.category.name}"></td>
-																		</tr>
-																	</tbody>
-																</table>
-															</div>
-														</div>
-													</div>
-
-													<!-- Modal footer -->
-													<div class="modal-footer">
-														<button type="button" class="btn btn-danger"
-															data-bs-dismiss="modal">Close</button>
-													</div>
-
-												</div>
-											</div>
-										</div>
-									</div>
-
-								</div>
-								<div th:if="${iterStat.index == 0}" class="card-footer">
-									<a href="#" style="text-decoration: none;"
-										data-bs-toggle="modal" data-bs-target="#addNewTask">+ Add
-										new</a>
-									<div class="modal" id="addNewTask">
-										<div class="modal-dialog modal-lg modal-dialog-centered">
-											<div class="modal-content">
-
-												<!-- Modal Header -->
-												<div class="modal-header">
-													<h4 class="modal-title">Add new task</h4>
-													<button type="button" class="btn-close"
-														data-bs-dismiss="modal"></button>
-												</div>
-
-												<!-- Modal body -->
-												<div class="modal-body">
-													<form id="addTaskForm"
-														th:action="@{/project/{projectId}/addTask(projectId=${projectFindById.id})}"
-														method="post" th:object="${taskNew}">
-														<div class="row">
-															<div class="col-sm-6">
-																<div class="mb-3 mt-3">
-																	<label for="nameTask" class="form-label">Name:</label>
-																	<input type="text" class="form-control" id="nameTask"
-																		placeholder="Enter name task" name="nameTask"
-																		th:field="*{name}">
-																</div>
-																<div class="mb-3">
-																	<label for="point" class="form-label">Point:</label> <input
-																		type="number" class="form-control" id="point"
-																		placeholder="Enter point" name="point"
-																		th:field="*{point}">
-																</div>
-																<div class="mb-3 mt-3">
-																	<label for="description" class="form-label">Description:</label>
-																	<input type="text" class="form-control"
-																		id="description" placeholder="Enter description"
-																		name="description" th:field="*{description}">
-																</div>
-															</div>
-															<div class="col-sm-6">
-																<div class="mb-3 mt-3">
-																	<label for="level" class="form-label">Level:</label> <select
-																		class="form-select" id="level" name="level"
-																		th:field="*{level}">
-																		<option value="1">Easy</option>
-																		<option value="2">Medium</option>
-																		<option value="3">Hard</option>
-																	</select>
-																</div>
-																<div class="mb-3">
-																	<label for="category" class="form-label">Category</label>
-																	<select class="form-select" id="category"
-																		name="category" th:field="*{category}">
-																		<option th:each="cate: ${categoryTask}"
-																			th:text="${cate.name}" th:value="${cate.id}"></option>
-																	</select>
-																</div>
-																<div class="mb-3">
-																	<label for="datetimepicker" class="form-label">Date
-																		end task:</label> <input type="text" class="form-control"
-																		id="datetimepicker" th:field="*{dateEnd}">
-																</div>
-																<div class="mb-3">
-																	<label for="userReceive" class="form-label">User
-																		Receive</label> <select class="form-select" id="userReceive"
-																		name="userReceive" th:field="*{userCreate}">
-																		<option th:each="user: ${userOfProject}"
-																			th:text="${user.nameLogin}" th:value="${user.id}"></option>
-																	</select>
-																</div>
-															</div>
-														</div>
-														<button type="submit" class="btn btn-primary">Submit</button>
-													</form>
-												</div>
-
-												<!-- Modal footer -->
-												<div class="modal-footer">
-													<button type="button" class="btn btn-danger"
-														data-bs-dismiss="modal">Close</button>
-												</div>
-
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-
-
-					</div>
-					<div class="row p-5"></div>
-					<div class="row p-4"></div>
-				</div>
+			<div class="col-sm-10 border" id="containProject">
+				
+				
 			</div>
 		</div>
 	</div>
@@ -401,6 +83,32 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+// ajax cho chuyển trang
+
+$(document).ready(function() {
+    $('.list-project-item').on('click', function(e) {
+        e.preventDefault();
+        $('.list-project-item').removeClass('active');
+        $(this).addClass('active');
+        var target = $(this).data('target');
+        var idProject = $(this).data('id');
+        $('#containProject').load('/project/changePage?idProject=' + idProject);
+    });
+});
+	// set active cho list project
+	document.addEventListener("DOMContentLoaded", function() {
+		// Lấy idProject từ URL
+		const urlParams = new URLSearchParams(window.location.pathname);
+		const idProject = window.location.pathname.split('/').pop();
+
+		// Tìm các mục danh sách và kiểm tra id
+		const items = document.querySelectorAll('.list-group-item');
+		items.forEach(function(item) {
+			if (item.getAttribute('data-id') === idProject) {
+				item.classList.add('active');
+			}
+		});
+	});
 	// create Datetime
 	flatpickr("#datetimepicker", {
 		enableTime : true,
@@ -413,61 +121,7 @@
 		return new bootstrap.Tooltip(tooltipTriggerEl)
 	})
 
-	$(document)
-			.ready(
-					function() {
-						$("form[id^='formSendCmt']")
-								.submit(
-										function(event) {
-											event.preventDefault();
-											var form = $(this);
-											var formData = JSON
-													.stringify({
-														idTask : form
-																.find(
-																		"input[name='idTaskCmt']")
-																.val(),
-														content : form
-																.find(
-																		"textarea[name='content']")
-																.val(),
-														idUser : "1"
-													});
-
-											$
-													.ajax({
-														url : '/sendComment',
-														type : 'POST',
-														contentType : 'application/json',
-														data : formData,
-														success : function(
-																response) {
-															var newCommentHtml = "<div class='row mb-2'>"
-																	+ "<div class='d-flex'>"
-																	+ "<p class='mb-0 me-3 fw-bold'>"
-																	+ response.nameUser
-																	+ "</p>"
-																	+ "<p class='mb-0 fst-italic'>"
-																	+ response.dateCreate
-																	+ "</p>"
-																	+ // Add date if necessary
-																	"</div>"
-																	+ "<p>"
-																	+ response.content
-																	+ "</p>"
-																	+ "</div>";
-															$(
-																	"#containComment"
-																			+ response.idTask)
-																	.append(
-																			newCommentHtml);
-														},
-														error : function() {
-															alert("Error");
-														}
-													});
-										});
-					});
+	
 </script>
 
 </html>
