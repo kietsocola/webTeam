@@ -35,6 +35,10 @@ public class TaskMapper {
         user.setId(1);
         task.setUserCreate(user);
         
+        User user2 = new User();
+        user2.setId(taskDTO.getUserReceive());
+        task.setUserReceive(user2);
+        
         Project project = new Project();
         project.setId(taskDTO.getIdProject());
         task.setProject(project);
@@ -50,7 +54,8 @@ public class TaskMapper {
         taskDTO.setLevel(task.getLevel());
         taskDTO.setDateEnd(task.getDateEnd().format(DATE_TIME_FORMATTER));
         taskDTO.setCategory(String.valueOf(task.getCategory().getId()));
-        taskDTO.setUserCreate(String.valueOf(task.getUserCreate().getId()));
+        taskDTO.setUserCreate(task.getUserCreate().getId());
+        taskDTO.setUserReceive(task.getUserReceive().getId());
         return taskDTO;
     }
 }

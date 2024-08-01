@@ -21,6 +21,16 @@ public class User {
 	private List<Comment> comments = new ArrayList<>();
 	@OneToMany(mappedBy="userCreate", cascade = CascadeType.REMOVE)
 	private List<Task> tasks = new ArrayList<>();
+	@OneToMany(mappedBy="userReceive", cascade = CascadeType.REMOVE)
+	private List<Task> tasksReceived = new ArrayList<>();
+	@OneToMany(mappedBy="user", cascade = CascadeType.REMOVE)
+	private List<Point> point = new ArrayList<>();
+	public List<Task> getTasksReceived() {
+		return tasksReceived;
+	}
+	public void setTasksReceived(List<Task> tasksReceived) {
+		this.tasksReceived = tasksReceived;
+	}
 	@ManyToMany(mappedBy = "users")
 	private List<Project> projects = new ArrayList<>();
 	public List<Project> getProjects() {
@@ -71,4 +81,11 @@ public class User {
 	public void setComments(List<Comment> comments) {
 		this.comments = comments;
 	}
+	public List<Point> getPoint() {
+		return point;
+	}
+	public void setPoint(List<Point> point) {
+		this.point = point;
+	}
+	
 }

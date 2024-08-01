@@ -20,6 +20,8 @@ public class Project {
 	private Date dateCreate;
 	@OneToMany(mappedBy="project", cascade = CascadeType.REMOVE)
 	private List<Task> tasks = new ArrayList<>();
+	@OneToMany(mappedBy="project", cascade = CascadeType.REMOVE)
+	private List<Point> points = new ArrayList<>();
 	@ManyToMany
 	@JoinTable(name = "project_user", joinColumns = @JoinColumn(name = "project_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
 	private List<User> users = new ArrayList<>();
@@ -62,6 +64,12 @@ public class Project {
 	}
 	public void setIdTeam(Integer idTeam) {
 		this.idTeam = idTeam;
+	}
+	public List<Point> getPoints() {
+		return points;
+	}
+	public void setPoints(List<Point> points) {
+		this.points = points;
 	}
 	
 	

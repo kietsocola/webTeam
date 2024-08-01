@@ -33,6 +33,16 @@ public class Task {
 	@ManyToOne
     @JoinColumn(name="userCreate", nullable = false)
 	private User userCreate;
+	@ManyToOne
+    @JoinColumn(name="userReceive", nullable = false)
+	private User userReceive;
+	public User getUserReceive() {
+		return userReceive;
+	}
+	public void setUserReceive(User userReceive) {
+		this.userReceive = userReceive;
+	}
+
 	@OneToMany(mappedBy="task", cascade = CascadeType.REMOVE)
 	private List<Comment> comments = new ArrayList<>();
 	public User getUserCreate() {

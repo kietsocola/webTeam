@@ -67,7 +67,7 @@
 							<span class="badge bg-warning" th:if="${task.level == 2}">MEDIUM</span>
 							<span class="badge bg-danger" th:if="${task.level == 3}">HARD</span>
 							<a class="navbar-brand ms-2" href="#" data-bs-toggle="tooltip"
-								th:title="${task.userCreate.nameLogin}"> <img
+								th:title="${task.userReceive.nameLogin}"> <img
 								src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png"
 								alt="Avatar Logo" style="width: 40px;" class="rounded-pill">
 							</a>
@@ -266,7 +266,7 @@
 											<div class="mb-3">
 												<label for="userReceive" class="form-label">User
 													Receive</label> <select class="form-select" id="userReceive"
-													name="userReceive" th:field="*{userCreate}">
+													name="userReceive" th:field="*{userReceive}">
 													<option th:each="user: ${userOfProject}"
 														th:text="${user.nameLogin}" th:value="${user.id}"></option>
 												</select>

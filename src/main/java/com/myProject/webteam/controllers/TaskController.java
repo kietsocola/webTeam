@@ -27,12 +27,12 @@ public class TaskController {
 	@PostMapping("/project/{idProject}/addTask")
 	public String loadTaskOfProject(@ModelAttribute TaskDTO taskDTO, @PathVariable("idProject") int idProject) {
 		Task taskSaved = taskService.saveTask(taskDTO);
-		return "redirect:/project/"+idProject;
+		return "redirect:/project?idProject="+idProject;
 	}
 	
 	@GetMapping("/task/changeStatus/{idProject}/{idTask}/{status}")
 	public String changeStatus(@PathVariable("idProject") int idProject, @PathVariable("idTask") int idTask, @PathVariable("status") int status) {
 		taskService.changTaskStatus(idTask, status);
-		return "redirect:/project/"+idProject;
+		return "redirect:/project?idProject="+idProject;
 	}
 }

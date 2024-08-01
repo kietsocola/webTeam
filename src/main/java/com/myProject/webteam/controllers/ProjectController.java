@@ -37,7 +37,7 @@ public class ProjectController {
 		model.addAttribute("projects", projects);
 		Project project = projects.getLast();
 		model.addAttribute("projectFindById", project);
-		return "board/index";
+		return "home/index";
 	}
 	@PostMapping("/addProject")
 	public String addProject(Model model, @RequestParam String nameProject) {
@@ -46,7 +46,7 @@ public class ProjectController {
 		model.addAttribute("projects", projects);
 		Project project = projects.getLast();
 		model.addAttribute("projectFindById", project);
-		return "board/index";
+		return "redirect:/project";
 	}
 	@GetMapping("/project/changePage")
 	public String detailProject(Model model, @RequestParam("idProject") int idProject) {

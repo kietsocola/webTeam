@@ -29,8 +29,16 @@ public class TaskDTO {
 		this.idProject = idProject;
 	}
 
-	private String userCreate;
-    private int idProject;
+	private int userCreate;
+	private int userReceive;
+    public int getUserReceive() {
+		return userReceive;
+	}
+
+	public void setUserReceive(int userReceive) {
+		this.userReceive = userReceive;
+	}
+	private int idProject;
 
     // Getters and Setters
     public String getName() {
@@ -81,11 +89,11 @@ public class TaskDTO {
         this.dateEnd = dateEnd;
     }
 
-    public String getUserCreate() {
+    public int getUserCreate() {
         return userCreate;
     }
 
-    public void setUserCreate(String userCreate) {
+    public void setUserCreate(int userCreate) {
         this.userCreate = userCreate;
     }
 }
