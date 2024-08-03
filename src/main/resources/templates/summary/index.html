@@ -1,4 +1,9 @@
 <html>
-<h1>Hello form sumnary</h1>
-
+<h5>User's point of this project</h5>
+<div th:each="user: ${project.users}">
+	<p th:text="${user.nameLogin}"></p>
+	<div th:each="point_item: ${user.point}">
+		<p th:if="${point_item.project.id == project.id}" th:text="${point_item.point}"></p>
+	</div>
+</div>
 </html>

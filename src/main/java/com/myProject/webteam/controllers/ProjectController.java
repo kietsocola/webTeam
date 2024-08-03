@@ -18,18 +18,25 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.myProject.webteam.dto.TaskDTO;
 import com.myProject.webteam.models.Project;
 import com.myProject.webteam.models.Task;
+import com.myProject.webteam.models.User;
 import com.myProject.webteam.services.CategoryService;
+import com.myProject.webteam.services.PointService;
 import com.myProject.webteam.services.ProjectService;
 import com.myProject.webteam.services.TaskService;
+import com.myProject.webteam.services.UserService;
 
 @Controller
 public class ProjectController {
 	private ProjectService projectService;
 	private CategoryService categoryService;
+	private PointService pointService;
+	private UserService userService;
 	@Autowired
-	public ProjectController(ProjectService projectService, CategoryService categoryService) {
+	public ProjectController(ProjectService projectService, CategoryService categoryService, PointService pointService, UserService userService) {
 		this.projectService = projectService;
 		this.categoryService = categoryService;
+		this.pointService = pointService;
+		this.userService = userService;
 	}
 	@GetMapping("/project")
 	public String home(Model model) {
@@ -68,5 +75,18 @@ public class ProjectController {
         model.addAttribute("loopList", loopList);
         model.addAttribute("taskNew", new TaskDTO());
 		return "project/index";
+	}
+	@GetMapping("/project/addUser")
+	public String addUser(@RequestParam("idPro") int idProject, @RequestParam("idUser") int idUser) {
+		User u = userService.getUserById(idUser);
+	    Project project = projectService.getProjectById(idProject);
+	    
+	    if (!project.getUsers().contains(u)) {
+	        project.getUsers().add(u);
+	    }
+	    
+		projectService.saveProject(project);
+		pointService.createPointFor_newUser(project, u);
+		return "redirect:/project";
 	}
 }

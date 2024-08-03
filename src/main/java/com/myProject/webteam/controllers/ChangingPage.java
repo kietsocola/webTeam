@@ -29,7 +29,9 @@ public class ChangingPage {
 		this.categoryService = categoryService;
 	}
 	@GetMapping("/summary/{section}")
-    public String getSummary(@PathVariable String section) {
+    public String getSummary(@PathVariable String section, Model model, @RequestParam int idProject) {
+		Project project = projectService.getProjectById(idProject);
+		model.addAttribute("project", project);
         return "summary/" + section;
     }
 	@GetMapping("/board/{section}")
