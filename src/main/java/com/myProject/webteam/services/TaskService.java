@@ -1,5 +1,6 @@
 package com.myProject.webteam.services;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,4 +12,5 @@ public interface TaskService {
 	Task saveTask(TaskDTO taskDto);
 	void changTaskStatus(int idTask, int status);
 	Optional<Task> getTaskById(int id);
+	List<Task> findListTaskByStatus(int status);
 }

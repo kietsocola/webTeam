@@ -6,4 +6,5 @@ import com.myProject.webteam.models.User;
 
 public interface PointService {
 	Point createPointFor_newUser(Project pro, User u); 
+	void deductPointsForOverdueTasks();
 }

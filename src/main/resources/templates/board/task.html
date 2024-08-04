@@ -92,7 +92,9 @@
 						<p class="fst-italic text-danger"
 							th:if="${task.hoursRemaining<=0 && task.status!=2}"
 							th:text="'deadline expired'"></p>
-						<p class="fst-italic text-success" th:if="${task.status==2}"
+						<p class="fst-italic text-success" th:if="${task.status==2 && task.completed==1}"
+							th:text="${task.dateEnd}"></p>
+						<p class="fst-italic text-danger" th:if="${task.status==2 && task.completed==0}"
 							th:text="${task.dateEnd}"></p>
 					</div>
 					<!-- MODAL -->

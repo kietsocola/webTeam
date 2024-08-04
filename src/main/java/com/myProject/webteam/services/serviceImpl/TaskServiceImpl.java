@@ -44,5 +44,9 @@ public class TaskServiceImpl implements TaskService{
 	public Optional<Task> getTaskById(int id) {
 		return taskRepo.findById(id);
 	}
+	@Override
+	public List<Task> findListTaskByStatus(int status) {
+		return taskRepo.findByDateEndBeforeAndStatusNot(LocalDateTime.now(), status);
+	}
 
 }

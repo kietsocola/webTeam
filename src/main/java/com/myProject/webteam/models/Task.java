@@ -25,6 +25,11 @@ public class Task {
 	private Category category;
 	private int level;
 	private int status;
+	private int completed;
+	public int getCompleted() {
+		return completed;
+	}
+
 	@ManyToOne
     @JoinColumn(name="project", nullable = false)
 	private Project project;
@@ -127,6 +132,12 @@ public class Task {
     public void setHoursRemaining(long hoursRemaining) {
         this.hoursRemaining = hoursRemaining;
     }
+	public int isCompleted() {
+		return completed;
+	}
+	public void setCompleted(int completed) {
+		this.completed = completed;
+	}
 	
 	
 }
