@@ -3,6 +3,7 @@ package com.myProject.webteam.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +17,8 @@ import com.myProject.webteam.models.Comment;
 import com.myProject.webteam.models.Task;
 import com.myProject.webteam.services.TaskService;
 
+import jakarta.validation.Valid;
+
 @Controller
 public class TaskController {
 	private TaskService taskService;
@@ -25,7 +28,11 @@ public class TaskController {
 	}
 	
 	@PostMapping("/project/{idProject}/addTask")
-	public String loadTaskOfProject(@ModelAttribute TaskDTO taskDTO, @PathVariable("idProject") int idProject) {
+	public String addTask(@Valid @ModelAttribute TaskDTO taskDTO, @PathVariable("idProject") int idProject, BindingResult result) {
+		if (result.hasErrors()) {
+	        // Return to form with validation errors
+	        return "project?idProject=" + idProject;
+	    }
 		Task taskSaved = taskService.saveTask(taskDTO);
 		return "redirect:/project?idProject="+idProject;
 	}

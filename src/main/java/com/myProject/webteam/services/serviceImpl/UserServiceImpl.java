@@ -13,7 +13,7 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public User getUserById(int id) {
 		// TODO Auto-generated method stub
-		return userRepo.findById(id).get();
+		return userRepo.findById(id).orElse(null);
 	}
 
 }

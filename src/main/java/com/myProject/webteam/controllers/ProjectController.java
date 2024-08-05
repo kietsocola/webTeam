@@ -81,12 +81,11 @@ public class ProjectController {
 		User u = userService.getUserById(idUser);
 	    Project project = projectService.getProjectById(idProject);
 	    
-	    if (!project.getUsers().contains(u)) {
+	    if (!project.getUsers().contains(u) && u!=null) {
 	        project.getUsers().add(u);
+			projectService.saveProject(project);
+			pointService.createPointFor_newUser(project, u);
 	    }
-	    
-		projectService.saveProject(project);
-		pointService.createPointFor_newUser(project, u);
 		return "redirect:/project";
 	}
 }

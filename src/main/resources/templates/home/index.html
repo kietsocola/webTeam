@@ -56,7 +56,7 @@
 					</div>
 
 					<div id="demo" class="collapse">
-						<form action="/addProject" method="POST">
+						<form id="projectForm" action="/addProject" method="POST">
 							<input type="text" placeholder="type then press enter..."
 								class="form-control mb-3" name="nameProject" id="nameProject">
 						</form>
@@ -69,10 +69,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-sm-10 border" id="containProject">
-				
-				
-			</div>
+			<div class="col-sm-10 border" id="containProject"></div>
 		</div>
 	</div>
 
@@ -121,7 +118,26 @@ $(document).ready(function() {
 		return new bootstrap.Tooltip(tooltipTriggerEl)
 	})
 
-	
+	// validate add project
+	function validateAndSubmit(event) {
+            const nameProject = document.getElementById('nameProject').value.trim();
+            if (nameProject === "") {
+                alert("Project name cannot be empty.");
+                event.preventDefault(); // Ngăn không cho biểu mẫu gửi đi
+                return false;
+            }
+            document.getElementById('projectForm').submit(); // Gửi biểu mẫu
+        }
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const form = document.getElementById('projectForm');
+            form.addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault(); // Ngăn không cho biểu mẫu gửi đi mặc định
+                    validateAndSubmit(event); // Thực hiện kiểm tra và gửi biểu mẫu nếu hợp lệ
+                }
+            });
+        });
 </script>
 
 </html>
