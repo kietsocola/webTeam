@@ -123,18 +123,18 @@ $(document).ready(function() {
             const nameProject = document.getElementById('nameProject').value.trim();
             if (nameProject === "") {
                 alert("Project name cannot be empty.");
-                event.preventDefault(); // Ngăn không cho biểu mẫu gửi đi
+                event.preventDefault();
                 return false;
             }
-            document.getElementById('projectForm').submit(); // Gửi biểu mẫu
+            document.getElementById('projectForm').submit();
         }
 
         document.addEventListener('DOMContentLoaded', (event) => {
             const form = document.getElementById('projectForm');
             form.addEventListener('keypress', function(event) {
                 if (event.key === 'Enter') {
-                    event.preventDefault(); // Ngăn không cho biểu mẫu gửi đi mặc định
-                    validateAndSubmit(event); // Thực hiện kiểm tra và gửi biểu mẫu nếu hợp lệ
+                    event.preventDefault();
+                    validateAndSubmit(event);
                 }
             });
         });
