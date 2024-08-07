@@ -22,12 +22,13 @@
 
 					<!-- Modal body -->
 
-					<form action="project/addUser" method="GET" onsubmit="return validateForm()">
+					<form action="project/addUser" method="POST"
+						onsubmit="return validateForm()">
 						<div class="modal-body">
 							<div class="mb-3 mt-3">
-								<label for="idUser" class="form-label">Id:</label> <input
-									type="text" class="form-control" id="idUser"
-									placeholder="Enter id user" name="idUser" oninput="validateInput(event)"> <input
+								<label for="idUser" class="form-label">Email:</label> <input
+									type="text" class="form-control" id="mailUser"
+									placeholder="Enter email user" name="mailUser"> <input
 									type="hidden" name="idPro" id="idPro"
 									th:value="${projectFindById.id}">
 							</div>
@@ -71,11 +72,10 @@
 							<span class="badge bg-success" th:if="${task.level == 1}">EASY</span>
 							<span class="badge bg-warning" th:if="${task.level == 2}">MEDIUM</span>
 							<span class="badge bg-danger" th:if="${task.level == 3}">HARD</span>
-							<a class="navbar-brand ms-2" href="#" data-bs-toggle="tooltip"
-								th:title="${task.userReceive.nameLogin}"> <img
-								src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png"
-								alt="Avatar Logo" style="width: 40px;" class="rounded-pill">
-							</a>
+							<button type="button" class="btn btn-sm btn-light ms-2"
+								data-bs-toggle="tooltip"
+								th:title="${task.userReceive.nameLogin}"
+								th:text="${task.userReceive.nameLogin}"></button>
 						</div>
 					</div>
 					<div class="row p-2"></div>
@@ -426,18 +426,25 @@
 							event.preventDefault();
 						}
 					});
-	// validate for invite user
-	function validateInput(event) {
-		const input = event.target;
-		input.value = input.value.replace(/\D/g, ''); // Loại bỏ bất kỳ ký tự không phải số nào
-	}
-
 	function validateForm() {
-		const idUser = document.getElementById('idUser').value;
-		if (idUser === '' || isNaN(idUser)) {
-			alert('Please enter a valid user ID.');
+		// Get the email input field
+		var email = document.getElementById('mailUser').value;
+
+		// Regular expression for validating email
+		var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+		// Validate the email field
+		if (!email) {
+			alert("Email cannot be empty.");
 			return false;
 		}
+
+		if (!emailPattern.test(email)) {
+			alert("Please enter a valid email address.");
+			return false;
+		}
+
+		// If everything is valid
 		return true;
 	}
 </script>

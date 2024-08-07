@@ -24,9 +24,12 @@ import com.myProject.webteam.services.PointService;
 import com.myProject.webteam.services.ProjectService;
 import com.myProject.webteam.services.TaskService;
 import com.myProject.webteam.services.UserService;
+import com.myProject.webteam.services.serviceImpl.SendMailService;
 
 @Controller
 public class ProjectController {
+	@Autowired
+    private SendMailService emailService;
 	private ProjectService projectService;
 	private CategoryService categoryService;
 	private PointService pointService;
@@ -76,16 +79,20 @@ public class ProjectController {
         model.addAttribute("taskNew", new TaskDTO());
 		return "project/index";
 	}
-	@GetMapping("/project/addUser")
-	public String addUser(@RequestParam("idPro") int idProject, @RequestParam("idUser") int idUser) {
-		User u = userService.getUserById(idUser);
+	@PostMapping("/project/addUser")
+	public String addUser(@RequestParam("idPro") int idProject, @RequestParam("mailUser") String mailUser) {
+		User u = userService.getUserByEmail(mailUser);
 	    Project project = projectService.getProjectById(idProject);
 	    
-	    if (!project.getUsers().contains(u) && u!=null) {
-	        project.getUsers().add(u);
-			projectService.saveProject(project);
-			pointService.createPointFor_newUser(project, u);
-	    }
+	    System.out.println("savdsvddddd  " + u.getEmail());
+	    emailService.sendSimpleMessage(mailUser, "[WEBTEAM thông báo]", "Bạn vừa được thêm vào project "+project.getName()+" bởi "+u.getNameLogin());
+//	    if (!project.getUsers().contains(u) && u!=null) {
+//	        project.getUsers().add(u);
+//			projectService.saveProject(project);
+//			pointService.createPointFor_newUser(project, u);
+//			
+//			emailService.sendSimpleMessage(mailUser, "[WEBTEAM thông báo]", "Bạn vừa được thêm vào project "+project.getName()+" bởi "+u.getNameLogin());
+//	    }
 		return "redirect:/project";
 	}
 }

@@ -14,6 +14,7 @@ public class User {
 	private int id;
 	private String nameLogin;
 	private String password;
+	private String email;
 	private int status;
 	@Column(name="dateCreate")
 	private LocalDateTime dateCreate;
@@ -86,6 +87,12 @@ public class User {
 	}
 	public void setPoint(List<Point> point) {
 		this.point = point;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
 	}
 	
 }

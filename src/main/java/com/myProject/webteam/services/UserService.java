@@ -4,4 +4,5 @@ import com.myProject.webteam.models.User;
 
 public interface UserService {
 	User getUserById(int id);
+	User getUserByEmail(String email);
 }

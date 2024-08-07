@@ -1,9 +1,72 @@
-<html>
-<h5>User's point of this project</h5>
-<div th:each="user: ${project.users}">
-	<p th:text="${user.nameLogin}"></p>
-	<div th:each="point_item: ${user.point}">
-		<p th:if="${point_item.project.id == project.id}" th:text="${point_item.point}"></p>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>User Points Chart</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+	<button id="loadChart" class="btn btn-success col-sm-1 mx-3 mt-3 mb-3">chart</button>
+	<h5>User's point of this project</h5>
+	<div style="display:none;" th:each="user: ${project.users}">
+		<p class="username" th:text="${user.nameLogin}"></p>
+		<div th:each="point_item: ${user.point}">
+			<p class="userpoint" th:if="${point_item.project.id == project.id}"
+				th:text="${point_item.point}"></p>
+		</div>
 	</div>
-</div>
+
+	<div class="col-sm-6">
+		<canvas id="userPointsChart" width="200px" height="100px"></canvas>
+	</div>
+
+	<script>
+		document.getElementById('loadChart').addEventListener(
+				'click',
+				function() {
+					// Get the username elements
+					var userNameElements = document
+							.querySelectorAll('.username');
+					var userNames = Array.from(userNameElements).map(
+							function(element) {
+								return element.textContent;
+							});
+
+					// Get the userpoint elements
+					var userPointElements = document
+							.querySelectorAll('.userpoint');
+					var userPoints = Array.from(userPointElements).map(
+							function(element) {
+								return parseInt(element.textContent, 10);
+							});
+
+					// Print the arrays to console
+					console.log('User Names:', userNames);
+					console.log('User Points:', userPoints);
+
+					// Get the context of the canvas element we want to select
+					var ctx = document.getElementById('userPointsChart')
+							.getContext('2d');
+					var userPointsChart = new Chart(ctx, {
+						type : 'bar',
+						data : {
+							labels : userNames,
+							datasets : [ {
+								label : 'Points',
+								data : userPoints,
+								backgroundColor : 'rgba(54, 162, 235, 0.2)',
+								borderColor : 'rgba(54, 162, 235, 1)',
+								borderWidth : 1
+							} ]
+						},
+						options : {
+							scales : {
+								y : {
+									beginAtZero : true
+								}
+							}
+						}
+					});
+				});
+	</script>
+</body>
 </html>
