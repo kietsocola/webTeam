@@ -25,6 +25,8 @@ public class Project {
 	@ManyToMany
 	@JoinTable(name = "project_user", joinColumns = @JoinColumn(name = "project_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
 	private List<User> users = new ArrayList<>();
+	@OneToMany(mappedBy = "project")
+    private List<ProjectRole> projectRoles;
 	public List<User> getUsers() {
 		return users;
 	}
@@ -70,6 +72,12 @@ public class Project {
 	}
 	public void setPoints(List<Point> points) {
 		this.points = points;
+	}
+	public List<ProjectRole> getProjectRoles() {
+		return projectRoles;
+	}
+	public void setProjectRoles(List<ProjectRole> projectRoles) {
+		this.projectRoles = projectRoles;
 	}
 	
 	

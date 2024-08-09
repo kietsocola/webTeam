@@ -9,5 +9,5 @@ import com.myProject.webteam.models.User;
 public interface UserRespository extends JpaRepository<User, Integer>{
 
 	Optional<User> findByEmail(String email);
-
+	Optional<User> findByNameLogin(String name);
 }

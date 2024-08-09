@@ -26,6 +26,8 @@ public class User {
 	private List<Task> tasksReceived = new ArrayList<>();
 	@OneToMany(mappedBy="user", cascade = CascadeType.REMOVE)
 	private List<Point> point = new ArrayList<>();
+	@OneToMany(mappedBy = "user")
+    private List<ProjectRole> projectRoles;
 	public List<Task> getTasksReceived() {
 		return tasksReceived;
 	}
@@ -93,6 +95,12 @@ public class User {
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	public List<ProjectRole> getProjectRoles() {
+		return projectRoles;
+	}
+	public void setProjectRoles(List<ProjectRole> projectRoles) {
+		this.projectRoles = projectRoles;
 	}
 	
 }
