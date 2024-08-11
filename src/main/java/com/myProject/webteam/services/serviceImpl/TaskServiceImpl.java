@@ -10,7 +10,10 @@ import org.springframework.stereotype.Service;
 import com.myProject.webteam.dto.TaskDTO;
 import com.myProject.webteam.mapper.TaskMapper;
 import com.myProject.webteam.models.Task;
+import com.myProject.webteam.models.User;
 import com.myProject.webteam.respositories.TaskResponsitory;
+import com.myProject.webteam.respositories.UserRespository;
+import com.myProject.webteam.security.SecurityUtil;
 import com.myProject.webteam.services.TaskService;
 
 @Service
@@ -18,10 +21,12 @@ public class TaskServiceImpl implements TaskService{
 
 	private TaskResponsitory taskRepo;
 	private TaskMapper taskMapper;
+	private UserRespository userRepo;
 	@Autowired
-	public TaskServiceImpl(TaskResponsitory taskRepo, TaskMapper taskMapper) {
+	public TaskServiceImpl(TaskResponsitory taskRepo, TaskMapper taskMapper, UserRespository userRepo) {
 		this.taskRepo = taskRepo;
 		this.taskMapper = taskMapper;
+		this.userRepo = userRepo;
 	}
 	@Override
 	public List<Task> getTaskByIdProject(int idProject) {
@@ -31,6 +36,9 @@ public class TaskServiceImpl implements TaskService{
 	public Task saveTask(TaskDTO taskDto) {
 		Task task = taskMapper.toTask(taskDto);
 		task.setDateCreate(LocalDateTime.now());
+        String nameLogin = SecurityUtil.getSessionUser();
+        User u = userRepo.findByNameLogin(nameLogin).get();
+        task.setUserCreate(u);
 		Task taskSaved = taskRepo.save(task);
 		return taskSaved;
 	}

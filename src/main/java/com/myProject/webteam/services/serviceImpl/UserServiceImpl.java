@@ -3,6 +3,7 @@ package com.myProject.webteam.services.serviceImpl;
 import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.myProject.webteam.dto.RegistrationDto;
@@ -22,6 +23,8 @@ public class UserServiceImpl implements UserService{
 	private RoleResponsitory roleRepo;
 	@Autowired
 	private ProjectRoleResponsitory proRoleRepo;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	@Override
 	public User getUserById(int id) {
@@ -62,7 +65,7 @@ public class UserServiceImpl implements UserService{
 		User user = new User();
 		user.setNameLogin(registrationDto.getUsername());
 		user.setEmail(registrationDto.getEmail());
-		user.setPassword(registrationDto.getPassword());
+		user.setPassword(passwordEncoder.encode(registrationDto.getPassword()));
 		user.setStatus(1);
 		user.setDateCreate(LocalDateTime.now());
 		userRepo.save(user);

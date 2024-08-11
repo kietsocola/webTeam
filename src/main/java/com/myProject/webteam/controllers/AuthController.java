@@ -16,6 +16,11 @@ import jakarta.validation.Valid;
 public class AuthController {
 	@Autowired
 	private UserService userService;
+	
+	@GetMapping("/login")
+    public String loginPage(){
+        return "form/login";
+    }
 	@GetMapping("/register")
 	public String getRegesterForm(Model model) {
 		RegistrationDto user = new RegistrationDto();
@@ -38,6 +43,6 @@ public class AuthController {
         }
 		userService.saveUser(user);
 		
-		return "redirect:/register?success";
+		return "redirect:/form/login";
 	}
 }
