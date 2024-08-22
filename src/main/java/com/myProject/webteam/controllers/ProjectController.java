@@ -3,6 +3,7 @@ package com.myProject.webteam.controllers;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.temporal.Temporal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,8 +18,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.myProject.webteam.dto.TaskDTO;
 import com.myProject.webteam.models.Project;
+import com.myProject.webteam.models.ProjectRole;
+import com.myProject.webteam.models.Role;
 import com.myProject.webteam.models.Task;
 import com.myProject.webteam.models.User;
+import com.myProject.webteam.respositories.ProjectRoleResponsitory;
+import com.myProject.webteam.respositories.RoleResponsitory;
+import com.myProject.webteam.security.SecurityUtil;
 import com.myProject.webteam.services.CategoryService;
 import com.myProject.webteam.services.PointService;
 import com.myProject.webteam.services.ProjectService;
@@ -28,8 +34,12 @@ import com.myProject.webteam.services.serviceImpl.SendMailService;
 
 @Controller
 public class ProjectController {
+//	@Autowired
+//  private SendMailService emailService;
 	@Autowired
-    private SendMailService emailService;
+	private ProjectRoleResponsitory projectRoleRepo;
+	@Autowired
+	private RoleResponsitory roleRepo;
 	private ProjectService projectService;
 	private CategoryService categoryService;
 	private PointService pointService;
@@ -43,7 +53,9 @@ public class ProjectController {
 	}
 	@GetMapping("/project")
 	public String home(Model model) {
-		List<Project> projects = projectService.getListProject();
+		String nameLogin = SecurityUtil.getSessionUser();
+        User u = userService.getUserByNameLogin(nameLogin);
+		List<Project> projects = projectService.getListProjectByUserId(u.getId());
 		model.addAttribute("projects", projects);
 		Project project = projects.getLast();
 		model.addAttribute("projectFindById", project);
@@ -51,16 +63,31 @@ public class ProjectController {
 	}
 	@PostMapping("/addProject")
 	public String addProject(Model model, @RequestParam String nameProject) {
-		projectService.saveProject(nameProject);
-		List<Project> projects = projectService.getListProject();
+		String nameLogin = SecurityUtil.getSessionUser();
+        User u = userService.getUserByNameLogin(nameLogin);
+		Project p = new Project();
+		p.setName(nameProject);
+		List<User> userList = new ArrayList<>();
+		userList.add(u);
+		p.setUsers(userList);
+		projectService.saveProject(p);
+		List<Project> projects = projectService.getListProjectByUserId(u.getId());
 		model.addAttribute("projects", projects);
 		Project project = projects.getLast();
 		model.addAttribute("projectFindById", project);
+		ProjectRole projectRole = new ProjectRole();
+		projectRole.setProject(p);
+		projectRole.setUser(u);
+		Role role = roleRepo.findByName("LEADER");
+		projectRole.setRole(role);
+		projectRoleRepo.save(projectRole);
 		return "redirect:/project";
 	}
 	@GetMapping("/project/changePage")
 	public String detailProject(Model model, @RequestParam("idProject") int idProject) {
-		List<Project> projects = projectService.getListProject();
+		String nameLogin = SecurityUtil.getSessionUser();
+        User u = userService.getUserByNameLogin(nameLogin);
+		List<Project> projects = projectService.getListProjectByUserId(u.getId());
 		model.addAttribute("projects", projects);
 		Project project = projectService.getProjectById(idProject);
 		LocalDateTime now = LocalDateTime.now();
@@ -83,16 +110,23 @@ public class ProjectController {
 	public String addUser(@RequestParam("idPro") int idProject, @RequestParam("mailUser") String mailUser) {
 		User u = userService.getUserByEmail(mailUser);
 	    Project project = projectService.getProjectById(idProject);
-	    
+	    //add Role
+	    ProjectRole projectRole = new ProjectRole();
+		projectRole.setProject(project);
+		projectRole.setUser(u);
+		Role role = roleRepo.findByName("USER");
+		projectRole.setRole(role);
+		projectRoleRepo.save(projectRole);
+		
 	    System.out.println("savdsvddddd  " + u.getEmail());
-	    emailService.sendSimpleMessage(mailUser, "[WEBTEAM thông báo]", "Bạn vừa được thêm vào project "+project.getName()+" bởi "+u.getNameLogin());
-//	    if (!project.getUsers().contains(u) && u!=null) {
-//	        project.getUsers().add(u);
-//			projectService.saveProject(project);
-//			pointService.createPointFor_newUser(project, u);
+//	    emailService.sendSimpleMessage(mailUser, "[WEBTEAM thông báo]", "Bạn vừa được thêm vào project "+project.getName()+" bởi "+u.getNameLogin());
+	    if (!project.getUsers().contains(u) && u!=null) {
+	        project.getUsers().add(u);
+			projectService.saveProject(project);
+			pointService.createPointFor_newUser(project, u);
 //			
 //			emailService.sendSimpleMessage(mailUser, "[WEBTEAM thông báo]", "Bạn vừa được thêm vào project "+project.getName()+" bởi "+u.getNameLogin());
-//	    }
+	    }
 		return "redirect:/project";
 	}
 }

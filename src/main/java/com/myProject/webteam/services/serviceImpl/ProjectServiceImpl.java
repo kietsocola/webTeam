@@ -37,5 +37,9 @@ public class ProjectServiceImpl implements ProjectService{
 	public Project saveProject(Project pro) {
 		return projectResponsitory.save(pro);
 	}
+	@Override
+	public List<Project> getListProjectByUserId(int id) {
+		return projectResponsitory.findByUsers_Id(id);
+	}
 
 }
