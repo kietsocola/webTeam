@@ -1,5 +1,5 @@
 <html>
-<div class="row">
+<div class="row" th:if="${projectFindById != null}">
 	<div class="row p-2 mt-2">
 		<h5 id="idProjectField" th:data-id="${projectFindById.id}" th:text="${projectFindById.name}"></h5>
 	</div>

@@ -29,7 +29,7 @@ public class CustomUserDetailsService implements UserDetailsService{
                     .map(projectRole -> new SimpleGrantedAuthority(projectRole.getRole().getName()))
                     .collect(Collectors.toList())
             );
-        	System.out.println(user.getProjectRoles().getFirst().getRole().getName());
+        	//System.out.println(user.getProjectRoles().getFirst().getRole().getName());
             return authUser;
         } else {
             throw new UsernameNotFoundException("Invalid username or password");

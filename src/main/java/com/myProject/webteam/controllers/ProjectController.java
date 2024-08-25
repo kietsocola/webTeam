@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.GrantedAuthority;
 
 import com.myProject.webteam.dto.TaskDTO;
 import com.myProject.webteam.models.Project;
@@ -57,8 +60,13 @@ public class ProjectController {
         User u = userService.getUserByNameLogin(nameLogin);
 		List<Project> projects = projectService.getListProjectByUserId(u.getId());
 		model.addAttribute("projects", projects);
-		Project project = projects.getLast();
-		model.addAttribute("projectFindById", project);
+		// Kiểm tra xem danh sách projects có rỗng không
+	    if (projects != null && !projects.isEmpty()) {
+	        Project project = projects.get(projects.size() - 1); // Lấy dự án cuối cùng
+	        model.addAttribute("projectFindById", project);
+	    } else {
+	        model.addAttribute("projectFindById", null); // Không có dự án nào
+	    }
 		return "home/index";
 	}
 	@PostMapping("/addProject")
@@ -81,6 +89,7 @@ public class ProjectController {
 		Role role = roleRepo.findByName("LEADER");
 		projectRole.setRole(role);
 		projectRoleRepo.save(projectRole);
+		pointService.createPointFor_newUser(project, u);
 		return "redirect:/project";
 	}
 	@GetMapping("/project/changePage")
@@ -108,25 +117,38 @@ public class ProjectController {
 	}
 	@PostMapping("/project/addUser")
 	public String addUser(@RequestParam("idPro") int idProject, @RequestParam("mailUser") String mailUser) {
-		User u = userService.getUserByEmail(mailUser);
-	    Project project = projectService.getProjectById(idProject);
-	    //add Role
-	    ProjectRole projectRole = new ProjectRole();
-		projectRole.setProject(project);
-		projectRole.setUser(u);
-		Role role = roleRepo.findByName("USER");
-		projectRole.setRole(role);
-		projectRoleRepo.save(projectRole);
-		
-	    System.out.println("savdsvddddd  " + u.getEmail());
-//	    emailService.sendSimpleMessage(mailUser, "[WEBTEAM thông báo]", "Bạn vừa được thêm vào project "+project.getName()+" bởi "+u.getNameLogin());
-	    if (!project.getUsers().contains(u) && u!=null) {
-	        project.getUsers().add(u);
-			projectService.saveProject(project);
-			pointService.createPointFor_newUser(project, u);
-//			
-//			emailService.sendSimpleMessage(mailUser, "[WEBTEAM thông báo]", "Bạn vừa được thêm vào project "+project.getName()+" bởi "+u.getNameLogin());
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (auth != null && auth.getAuthorities().stream()
+	            .anyMatch(role -> role.getAuthority().equals("LEADER"))) {
+	        // code for admin role
+
+			
+			User u = userService.getUserByEmail(mailUser);
+		    Project project = projectService.getProjectById(idProject);
+		    //add Role
+		    ProjectRole projectRole = new ProjectRole();
+			projectRole.setProject(project);
+			projectRole.setUser(u);
+			Role role = roleRepo.findByName("USER");
+			projectRole.setRole(role);
+			projectRoleRepo.save(projectRole);
+			
+		    System.out.println("savdsvddddd  " + u.getEmail());
+//		    emailService.sendSimpleMessage(mailUser, "[WEBTEAM thông báo]", "Bạn vừa được thêm vào project "+project.getName()+" bởi "+u.getNameLogin());
+		    if (!project.getUsers().contains(u) && u!=null) {
+		        project.getUsers().add(u);
+				projectService.saveProject(project);
+				pointService.createPointFor_newUser(project, u);
+//				
+//				emailService.sendSimpleMessage(mailUser, "[WEBTEAM thông báo]", "Bạn vừa được thêm vào project "+project.getName()+" bởi "+u.getNameLogin());
+		    }
+	    } else {
+	        // code for non-leader
+	    	for (GrantedAuthority authority : auth.getAuthorities()) {
+	            System.out.println("User has role: " + authority.getAuthority());
+	        }
 	    }
+		
 		return "redirect:/project";
 	}
 }

@@ -16,6 +16,7 @@ import com.myProject.webteam.models.Comment;
 import com.myProject.webteam.models.Task;
 import com.myProject.webteam.models.User;
 import com.myProject.webteam.respositories.CommentResponsitory;
+import com.myProject.webteam.security.SecurityUtil;
 import com.myProject.webteam.services.CommentService;
 import com.myProject.webteam.services.TaskService;
 import com.myProject.webteam.services.UserService;
@@ -41,8 +42,8 @@ public class CommentController {
 		// Log the found task
 		System.out.println("Found Task: " + task);
 
-		User user = new User();
-		user = userService.getUserById(cmtDto.getIdUser());
+		String nameLogin = SecurityUtil.getSessionUser();
+        User user = userService.getUserByNameLogin(nameLogin);
 		System.out.println("name login: " + user.getNameLogin());
 
 		Comment comment = new Comment();
