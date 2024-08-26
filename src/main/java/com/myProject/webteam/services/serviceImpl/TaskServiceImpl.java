@@ -56,5 +56,9 @@ public class TaskServiceImpl implements TaskService{
 	public List<Task> findListTaskByStatus(int status) {
 		return taskRepo.findByDateEndBeforeAndStatusNot(LocalDateTime.now(), status);
 	}
+	@Override
+	public void deleteTaskById(int id) {
+		taskRepo.deleteById(id);
+	}
 
 }

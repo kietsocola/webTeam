@@ -13,4 +13,5 @@ public interface TaskService {
 	void changTaskStatus(int idTask, int status);
 	Optional<Task> getTaskById(int id);
 	List<Task> findListTaskByStatus(int status);
+	void deleteTaskById(int id);
 }

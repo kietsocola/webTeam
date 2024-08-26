@@ -1,9 +1,11 @@
 package com.myProject.webteam.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,5 +43,10 @@ public class TaskController {
 	public String changeStatus(@PathVariable("idProject") int idProject, @PathVariable("idTask") int idTask, @PathVariable("status") int status) {
 		taskService.changTaskStatus(idTask, status);
 		return "redirect:/project?idProject="+idProject;
+	}
+	@DeleteMapping("/task/delete/{id}")
+	public ResponseEntity<Void> deleteTask(@PathVariable int id) {
+	    taskService.deleteTaskById(id);
+	    return ResponseEntity.noContent().build();
 	}
 }

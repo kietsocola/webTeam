@@ -142,13 +142,15 @@ public class ProjectController {
 //				
 //				emailService.sendSimpleMessage(mailUser, "[WEBTEAM thông báo]", "Bạn vừa được thêm vào project "+project.getName()+" bởi "+u.getNameLogin());
 		    }
+		    return "redirect:/project";
 	    } else {
 	        // code for non-leader
 	    	for (GrantedAuthority authority : auth.getAuthorities()) {
 	            System.out.println("User has role: " + authority.getAuthority());
 	        }
+	    	return "redirect:/project?addUserFail";
 	    }
 		
-		return "redirect:/project";
+		
 	}
 }
