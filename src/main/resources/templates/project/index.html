@@ -1,4 +1,4 @@
-<html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <div class="row" th:if="${projectFindById != null}">
 	<div class="row p-2 mt-2">
 		<h5 id="idProjectField" th:data-id="${projectFindById.id}" th:text="${projectFindById.name}"></h5>
@@ -14,8 +14,6 @@
 					data-target="summary/index">Summary</a></li>
 				<li class="nav-item"><a class="nav-link active" href="#"
 					data-target="board/task">Board</a></li>
-				<li class="nav-item"><a class="nav-link" href="#">Calendar</a>
-				</li>
 			</ul>
 		</nav>
 	</div>
@@ -25,7 +23,7 @@
 var idProject = $('#idProjectField').data('id');
 $('#content').load('/board/task.html?idProject=' + idProject);
 $(document).ready(function() {
-    $('.nav-link').on('click', function(e) {
+    $('.nav-link.project').on('click', function(e) {
         e.preventDefault();
         var target = $(this).data('target');
 		const idProject = $('#idProjectField').data('id');

@@ -34,6 +34,7 @@ import com.myProject.webteam.services.ProjectService;
 import com.myProject.webteam.services.TaskService;
 import com.myProject.webteam.services.UserService;
 import com.myProject.webteam.services.serviceImpl.SendMailService;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class ProjectController {
@@ -116,10 +117,10 @@ public class ProjectController {
 		return "project/index";
 	}
 	@PostMapping("/project/addUser")
-	public String addUser(@RequestParam("idPro") int idProject, @RequestParam("mailUser") String mailUser) {
+	public String addUser(@RequestParam("idPro") int idProject, @RequestParam("mailUser") String mailUser, RedirectAttributes redirectAttributes) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (auth != null && auth.getAuthorities().stream()
-	            .anyMatch(role -> role.getAuthority().equals("LEADER"))) {
+	            .anyMatch(role -> role.getAuthority().equals("LEADER_" + idProject))) {
 	        // code for admin role
 
 			
@@ -139,7 +140,7 @@ public class ProjectController {
 		        project.getUsers().add(u);
 				projectService.saveProject(project);
 				pointService.createPointFor_newUser(project, u);
-//				
+				redirectAttributes.addFlashAttribute("addUserSuccess", "Add user success!");
 //				emailService.sendSimpleMessage(mailUser, "[WEBTEAM thông báo]", "Bạn vừa được thêm vào project "+project.getName()+" bởi "+u.getNameLogin());
 		    }
 		    return "redirect:/project";
@@ -148,6 +149,7 @@ public class ProjectController {
 	    	for (GrantedAuthority authority : auth.getAuthorities()) {
 	            System.out.println("User has role: " + authority.getAuthority());
 	        }
+			redirectAttributes.addFlashAttribute("addUserFail", "Failed to add user becasue you aren't leader!");
 	    	return "redirect:/project?addUserFail";
 	    }
 		

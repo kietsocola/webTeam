@@ -17,6 +17,26 @@
 </head>
 
 <body>
+<!-- Toast hiển thị khi thêm người dùng thất bại -->
+<div th:if="${addUserFail}" class="toast align-items-center text-white bg-danger border-0 position-fixed bottom-0 end-0 m-3" role="alert" aria-live="assertive" aria-atomic="true">
+	<div class="d-flex">
+		<div class="toast-body">
+			<p th:text="${addUserFail}"></p>
+		</div>
+		<button type="button" class="btn-close btn-close-white m-2" data-bs-dismiss="toast" aria-label="Close"></button>
+	</div>
+</div>
+
+<!-- Toast hiển thị khi thêm người dùng thành công -->
+<div th:if="${addUserSuccess}" class="toast align-items-center text-white bg-success border-0 position-fixed bottom-0 end-0 m-3" role="alert" aria-live="assertive" aria-atomic="true">
+	<div class="d-flex">
+		<div class="toast-body">
+			<p th:text="${addUserSuccess}"></p>
+		</div>
+		<button type="button" class="btn-close btn-close-white m-2" data-bs-dismiss="toast" aria-label="Close"></button>
+	</div>
+</div>
+
 	<div class="container-fluid">
 		<nav class="navbar navbar-expand-sm bg-light">
 
@@ -140,6 +160,27 @@ $(document).ready(function() {
                 }
             });
         });
+</script>
+<script th:inline="javascript">
+	/*<![CDATA[*/
+    // Kiểm tra và hiển thị Toast khi có lỗi
+    var toastElementFail = document.querySelector('.toast.bg-danger');
+    if (toastElementFail) {
+        var toastFail = new bootstrap.Toast(toastElementFail, {
+            delay: 3000 // Thời gian hiển thị toast (ms)
+        });
+        toastFail.show();
+    }
+
+    // Kiểm tra và hiển thị Toast khi thành công
+    var toastElementSuccess = document.querySelector('.toast.bg-success');
+    if (toastElementSuccess) {
+        var toastSuccess = new bootstrap.Toast(toastElementSuccess, {
+            delay: 3000 // Thời gian hiển thị toast (ms)
+        });
+        toastSuccess.show();
+    }
+    /*]]>*/
 </script>
 
 </html>

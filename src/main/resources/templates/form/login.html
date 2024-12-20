@@ -1,22 +1,39 @@
-<html
-    xmlns:th="http://thymeleaf.org"
-    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    layout:decorate="~{layout}">
+<html xmlns:th="http://thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 <head>
     <title>Register</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
             background: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
         }
 
+        /* Dark overlay */
+        .login-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); /* Black with opacity */
+            z-index: 1; /* Ensure overlay is behind the login form */
+        }
+
+        /* Centered login form */
         .login-container {
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-size: cover;
-            background-position: center;
+            z-index: 2; /* Ensure the form is above the overlay */
         }
 
         .login-form {
@@ -26,6 +43,7 @@
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
             width: 100%;
             max-width: 400px;
+            z-index: 100;
         }
 
         .login-form h2 {
@@ -75,6 +93,9 @@
 </head>
 <body>
 <section layout:fragment="body">
+    <!-- Dark overlay background -->
+    <div class="login-overlay"></div>
+
     <div class="login-container">
         <div class="login-form">
             <h2>Login</h2>
@@ -88,20 +109,20 @@
                 <div class="form-group">
                     <label>Username</label>
                     <input
-                        id="username"
-                        type="text"
-                        class="form-control"
-                        placeholder="Username"
-                        name="username">
+                            id="username"
+                            type="text"
+                            class="form-control"
+                            placeholder="Username"
+                            name="username">
                 </div>
                 <div class="form-group">
                     <label>Password</label>
                     <input
-                        id="password"
-                        type="password"
-                        class="form-control"
-                        placeholder="Password"
-                        name="password">
+                            id="password"
+                            type="password"
+                            class="form-control"
+                            placeholder="Password"
+                            name="password">
                 </div>
                 <button type="submit" value="Log in" class="btn btn-login">Login</button>
             </form>
